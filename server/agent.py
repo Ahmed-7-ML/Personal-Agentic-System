@@ -40,7 +40,7 @@ tools = [search_knowledge_base]
 agent = create_tool_calling_agent(llm, tools, prompt)
 
 # Create Agent Executer
-agent_executor = AgentExecutor(agent, tools, verbose=True)
+agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
 # Create Agent with Chat History
 agent_with_chat_history = RunnableWithMessageHistory(

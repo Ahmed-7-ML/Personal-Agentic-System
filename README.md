@@ -49,7 +49,7 @@ graph TD
 
 ### Backend (Python/FastAPI)
 - **Server**: FastAPI server with CORS and file upload support
-- **Agent**: LangChain ReAct agent with Google Gemini (`gemini-1.5-flash`)
+- **Agent**: LangChain ReAct agent with Google Gemini (`gemini-2.5-flash`)
 - **Vector Database**: Pinecone for document storage and similarity search
 - **Embeddings**: Pinecone-hosted `llama-text-embed-v2` model
 - **Observability**: LangSmith for tracing and monitoring

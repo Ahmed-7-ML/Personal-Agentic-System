@@ -28,11 +28,11 @@ app.add_middleware(
 
 # Define Request Body
 class QueryRequest(BaseModel):
-    query: str
+    message: str
     sessionId: str = "default"
 
 # Define Endpoints
-@app.post("/api/ask")
+@app.post("/api/chat")
 async def ask(req: QueryRequest):
     if not req.message:
         raise HTTPException(status_code=400, detail="Message required")
@@ -77,4 +77,4 @@ async def ingest(file: UploadFile = File(...)):
 
 # Run the server
 if __name__ == "__main__":
-    uvicorn.run("server.main:app", host="[IP_ADDRESS]", port=3001, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=3001, reload=True)
