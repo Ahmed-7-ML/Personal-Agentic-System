@@ -17,7 +17,7 @@ def get_session_history(session_id: str):
 
 
 # Initialize Model
-llm = ChatGoogleGenerativeAI(model='gemini-2.5-flash', temperature=0)
+llm = ChatGoogleGenerativeAI(model='gemini-1.5-flash', temperature=0)
 
 # Define System Prompt
 system_prompt = """
