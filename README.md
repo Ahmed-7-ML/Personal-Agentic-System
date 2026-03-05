@@ -156,9 +156,9 @@ agentic-personal-assistant/
 ## 🔄 How It Works
 
 ### Document Ingestion
-1. User uploads PDF via frontend
-2. Server receives file and extracts text using PDFLoader
-3. Text is split into chunks (1000 chars with 200 overlap)
+1. User uploads PDF via frontend (Streamlit)
+2. Server receives file and extracts text using PyPDFLoader
+3. Text is split into chunks (1000 chars with 200 overlap) using RecursiveCharacterTextSplitter
 4. Chunks are converted to embeddings using Pinecone's model
 5. Embeddings are stored in Pinecone vector database
 
@@ -172,25 +172,24 @@ agentic-personal-assistant/
 
 ## 🔧 Key Components
 
-### Agent (`server/agent.js`)
-- ReAct agent using LangChain's `createAgent`
-- MemorySaver for conversation persistence
+### Agent (`server/agent.py`)
+- ReAct agent using LangChain's `create_tool_calling_agent` and `AgentExecutor`
+- `ChatMessageHistory` for conversation persistence
 - Tool calling for knowledge base search
 
-### Search Tool (`server/tools.js`)
-- Pinecone vector store integration
+### Search Tool (`server/tools.py`)
+- Pinecone vector store integration with `langchain-pinecone`
 - Similarity search with top-k results
 - Lazy initialization for environment variables
 
-### Ingestion Pipeline (`server/ingest.js`)
-- PDF text extraction and chunking
-- Batch processing (96 chunks per API call)
-- Pinecone upsert operations
+### Ingestion Pipeline (`server/ingest.py`)
+- PDF text extraction and chunking (`PyPDFLoader`)
+- Batch processing and Pinecone upsert operations via `PineconeVectorStore`
 
-### Frontend (`client/src/App.jsx`)
-- React state management for chat and upload
-- File upload with progress feedback
-- Real-time chat interface with auto-scroll
+### Frontend (`client/app.py`)
+- Streamlit application for fast UI development
+- File upload with `st.file_uploader`
+- Real-time chat interface with `st.chat_message` and `st.session_state`
 
 ## 🐛 Troubleshooting
 
@@ -210,8 +209,8 @@ agentic-personal-assistant/
    - Ensure embedding model matches ingestion/retrieval
 
 4. **Dependency Installation Errors**
-   - Use `--legacy-peer-deps` flag for peer dependency conflicts
-   - Clear node_modules and reinstall if needed
+   - Ensure you are using a virtual environment (optional but recommended)
+   - If a package fails to install, try upgrading pip: `python -m pip install --upgrade pip`
 
 ## 📚 Technologies Used
 

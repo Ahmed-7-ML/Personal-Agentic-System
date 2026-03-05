@@ -6,7 +6,8 @@ from langchain_community.chat_message_histories import ChatMessageHistory
 from tools import search_knowledge_base
 import os
 
-# Global store for session histories
+# Global Store for Session Histories
+# Key: session_id, Value: ChatMessageHistory
 session_histories = {}
 
 def get_session_history(session_id: str):
@@ -14,38 +15,52 @@ def get_session_history(session_id: str):
         session_histories[session_id] = ChatMessageHistory()
     return session_histories[session_id]
 
-# Initialize model
-llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0)
+
+# Initialize Model
+llm = ChatGoogleGenerativeAI(model='gemini-2.5-flash', temperature=0)
+
+# Define System Prompt
+system_prompt = """
+    You are a helpful AI assistant with access to a knowledge base.
+    When users ask questions, search the knowledge base using the available tools to find relevant information.
+    Be concise and accurate.
+"""
 
 prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are a helpful AI assistant with access to a knowledge base. When users ask questions, search the knowledge base using the available tools to find relevant information. Be concise and accurate."),
+    ("system", system_prompt),
     MessagesPlaceholder(variable_name="chat_history"),
     ("user", "{input}"),
-    MessagesPlaceholder(variable_name="agent_scratchpad"),
+    MessagesPlaceholder(variable_name="agent_scratchpad")
 ])
 
+# Define Tools
 tools = [search_knowledge_base]
 
+# Create Agent
 agent = create_tool_calling_agent(llm, tools, prompt)
 
-agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+# Create Agent Executer
+agent_executor = AgentExecutor(agent, tools, verbose=True)
 
+# Create Agent with Chat History
 agent_with_chat_history = RunnableWithMessageHistory(
     agent_executor,
     get_session_history,
     input_messages_key="input",
-    history_messages_key="chat_history",
+    history_messages_key="chat_history"
 )
 
+# Function to run the agent
 def run_agent(session_id: str, message: str) -> dict:
     print(f"🤖 Running agent for: '{message}'")
-    
+
     response = agent_with_chat_history.invoke(
         {"input": message},
         config={"configurable": {"session_id": session_id}}
     )
-    
+
     output = response.get("output", "")
     print(f"✅ Agent response: {output[:100]}...")
-    
+
     return {"output": output}
+
