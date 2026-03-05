@@ -52,7 +52,7 @@ agent_with_chat_history = RunnableWithMessageHistory(
 
 # Function to run the agent
 def run_agent(session_id: str, message: str) -> dict:
-    print(f"🤖 Running agent for: '{message}'")
+    print(f"Running agent for: '{message}'")
 
     response = agent_with_chat_history.invoke(
         {"input": message},
@@ -60,7 +60,6 @@ def run_agent(session_id: str, message: str) -> dict:
     )
 
     output = response.get("output", "")
-    print(f"✅ Agent response: {output[:100]}...")
+    print(f"Agent response: {output[:100]}...")
 
     return {"output": output}
-

@@ -19,14 +19,13 @@ def get_vector_store():
     )
     return vectorstore
 
-
 # Search Knowledge Base Tool
 @tool
 def search_knowledge_base(query: str) -> str:
     """Searches the internal knowledge base for technical info and documentation.
     Use this when you need to find information from uploaded PDF documents."""
     
-    print(f"🔍 Agent is searching Pinecone for: '{query}'")
+    print(f"Agent is searching Pinecone for: '{query}'")
     store = get_vector_store()
 
     # Fetch the top 10 most similar chunks
@@ -40,4 +39,3 @@ def search_knowledge_base(query: str) -> str:
 
     # Join the chunks so the LLM can read them as one context block
     return "\n\n---\n\n".join([doc.page_content for doc in results])
-

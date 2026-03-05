@@ -24,5 +24,5 @@ def ingest_data(file_path: str):
     # Ingest directly into Pinecone. PineconeVectorStore will handle batches automatically.
     embeddings = PineconeEmbeddings(model="llama-text-embed-v2")
     PineconeVectorStore.from_documents(chunks, embeddings, index_name=index_name)
-    print("✅ Uploaded to Pinecone")
+    print("Uploaded to Pinecone")
     
